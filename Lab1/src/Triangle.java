@@ -20,6 +20,7 @@ class Triangle extends Figure implements Printable {
 
     @Override
     public void print() {
-        System.out.println("Triangle");
+        System.out.println("Area of a triangle: " + calculateArea());
+        System.out.println("Perimeter of a triangle: " + calculatePerimeter());
     }
 }

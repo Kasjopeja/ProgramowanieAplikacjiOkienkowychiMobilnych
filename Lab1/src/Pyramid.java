@@ -9,7 +9,7 @@ public class Pyramid implements Printable{
     }
 
     public double volume() {
-        return (1/3) * base.calculatePerimeter() *height;
+        return 0.3 * base.calculatePerimeter() *height;
     }
 
     @Override
