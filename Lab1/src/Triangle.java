@@ -1,9 +1,18 @@
+import static java.lang.Math.sqrt;
+
 class Triangle extends Figure implements Printable {
 
     double a;
     double height;
 
     public Triangle(double a, double height) {
+        if (a <= 0) {
+            throw new IllegalArgumentException("Base 'a' must be greater than zero.");
+        }
+        if (height <= 0) {
+            throw new IllegalArgumentException("Height must be greater than zero.");
+        }
+
         this.a = a;
         this.height = height;
     }
@@ -13,9 +22,10 @@ class Triangle extends Figure implements Printable {
         return 0.5 * a * height;
     }
 
+    //zakładamy trójkąt równoramienny
     @Override
     public double calculatePerimeter() {
-        return 3 * a;
+        return a + sqrt((a/2) * (a/2) + (height*height) * 2);
     }
 
     @Override

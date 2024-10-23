@@ -4,6 +4,13 @@ class Rectangle extends Figure implements Printable {
     double height;
 
     public Rectangle(double width, double height) {
+        if (width <= 0) {
+            throw new IllegalArgumentException("Width must be greater than zero.");
+        }
+        if (height <= 0) {
+            throw new IllegalArgumentException("Height must be greater than zero.");
+        }
+
         this.width = width;
         this.height = height;
     }
