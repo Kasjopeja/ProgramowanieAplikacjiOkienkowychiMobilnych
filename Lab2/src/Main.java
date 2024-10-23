@@ -10,5 +10,17 @@ public class Main {
         dog.print();
         parrot.print();
         rabbit.print();
+
+        AnimalShelter shelter = new AnimalShelter();
+
+        shelter.addAnimal(cat);
+        shelter.addAnimal(dog);
+        shelter.addAnimal(parrot);
+        shelter.addAnimal(rabbit);
+
+        shelter.removeAnimal(cat);
+        shelter.getAnimal(dog);
+
+
     }
 }
