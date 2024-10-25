@@ -12,16 +12,39 @@ public class Main {
         rabbit.print();
 
         ShelterManager shelterManager = new ShelterManager();
-        shelterManager.addShelter("aaa", 3);
+        shelterManager.addShelter("aaa", 5);
 
-        shelterManager.shelters.get("aaa").addAnimal(cat);
-        shelterManager.shelters.get("aaa").addAnimal(dog);
-        shelterManager.shelters.get("aaa").addAnimal(parrot);
-        shelterManager.shelters.get("aaa").addAnimal(rabbit);
+        shelterManager.addToShelter("aaa", cat);
+        shelterManager.addToShelter("aaa", dog);
+        shelterManager.addToShelter("aaa", parrot);
+        shelterManager.addToShelter("aaa", rabbit);
 
+        //test wszytskich metod AnimalShelter
+
+        shelterManager.shelters.get("aaa").changeCondition(parrot,AnimalCondition.Kwarantanna);
+        shelterManager.shelters.get("aaa").countByCondition(AnimalCondition.Kwarantanna);
+        shelterManager.shelters.get("aaa").changeAge(cat, 2);
         shelterManager.shelters.get("aaa").removeAnimal(cat);
         shelterManager.shelters.get("aaa").getAnimal(dog);
+        shelterManager.shelters.get("aaa").sortByName();
+        shelterManager.shelters.get("aaa").sortByPrice();
+        shelterManager.shelters.get("aaa").search("Buddy");
+        shelterManager.shelters.get("aaa").searchPartial("LLY");
+        shelterManager.shelters.get("aaa").summary();
+        shelterManager.shelters.get("aaa").max();
 
+        //test wszystkich metod ShelterManager
+
+        shelterManager.addShelter("bbb", 3);
+
+        shelterManager.addToShelter("bbb", cat);
+        shelterManager.addToShelter("bbb", dog);
+        shelterManager.addToShelter("bbb", parrot);
+        shelterManager.addToShelter("bbb", rabbit);
+
+        shelterManager.summary();
+        shelterManager.removeShelter("bbb");
+        shelterManager.findEmpty();
 
     }
 }

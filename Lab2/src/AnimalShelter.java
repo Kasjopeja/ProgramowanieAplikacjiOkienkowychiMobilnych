@@ -66,16 +66,18 @@ public class AnimalShelter {
 
     public void sortByName() {
         animalList.sort(Comparator.comparing(animal -> animal.name));
+        summary();
     }
 
     public void sortByPrice() {
         animalList.sort(Comparator.comparing(animal -> animal.price));
+        summary();
     }
 
     public void search(String name) {
         for (Animal animal : animalList) {
             if (animal.name.equals(name.toLowerCase())) {
-                System.out.println(animal.species + " " + animal.name + " was found: " + animalList.indexOf(animal));
+                System.out.println(animal.species + " " + animal.name + " was found (index): " + animalList.indexOf(animal));
             }
         }
     }
@@ -83,7 +85,7 @@ public class AnimalShelter {
     public void searchPartial(String name) {
         for (Animal animal : animalList) {
             if (animal.name.contains(name.toLowerCase())) {
-                System.out.println(animal.species + " " + animal.name + " was found: " + animalList.indexOf(animal));
+                System.out.println(animal.species + " " + animal.name + " was found (index): " + animalList.indexOf(animal));
             }
         }
     }
@@ -95,6 +97,6 @@ public class AnimalShelter {
     }
 
     public void max() {
-        System.out.println(Collections.max(animalList));
+        System.out.println(Collections.max(animalList).name);
     }
 }
