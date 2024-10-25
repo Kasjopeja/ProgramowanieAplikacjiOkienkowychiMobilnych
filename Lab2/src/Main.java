@@ -11,15 +11,16 @@ public class Main {
         parrot.print();
         rabbit.print();
 
-        AnimalShelter shelter = new AnimalShelter();
+        ShelterManager shelterManager = new ShelterManager();
+        shelterManager.addShelter("aaa", 3);
 
-        shelter.addAnimal(cat);
-        shelter.addAnimal(dog);
-        shelter.addAnimal(parrot);
-        shelter.addAnimal(rabbit);
+        shelterManager.shelters.get("aaa").addAnimal(cat);
+        shelterManager.shelters.get("aaa").addAnimal(dog);
+        shelterManager.shelters.get("aaa").addAnimal(parrot);
+        shelterManager.shelters.get("aaa").addAnimal(rabbit);
 
-        shelter.removeAnimal(cat);
-        shelter.getAnimal(dog);
+        shelterManager.shelters.get("aaa").removeAnimal(cat);
+        shelterManager.shelters.get("aaa").getAnimal(dog);
 
 
     }

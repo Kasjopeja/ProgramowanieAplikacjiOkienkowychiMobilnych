@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Objects;
 
 public class Animal implements Comparable<Animal>{
@@ -9,8 +10,8 @@ public class Animal implements Comparable<Animal>{
     AnimalCondition condition;
 
     public Animal(String name, String species, int age, double price, double weight, AnimalCondition condition) {
-        this.name = name;
-        this.species = species;
+        this.name = name.toLowerCase();
+        this.species = species.toLowerCase();
         this.age = age;
         this.price = price;
         this.weight = weight;

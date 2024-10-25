@@ -5,8 +5,13 @@ public class AnimalShelter {
     List<Animal> animalList = new ArrayList<Animal>();
     int maxCapacity;
 
+    AnimalShelter(String shelterName, int maxCapacity) {
+        this.shelterName = shelterName.toLowerCase();
+        this.maxCapacity = maxCapacity;
+    }
+
     public void addAnimal(Animal animal) {
-        if (animalList.size() < maxCapacity) {
+        if (animalList.size() >= maxCapacity) {
             System.err.println("No more room in the shelter available");
             return;
         }
@@ -69,7 +74,7 @@ public class AnimalShelter {
 
     public void search(String name) {
         for (Animal animal : animalList) {
-            if (animal.name.equals(name)) {
+            if (animal.name.equals(name.toLowerCase())) {
                 System.out.println(animal.species + " " + animal.name + " was found: " + animalList.indexOf(animal));
             }
         }
@@ -77,7 +82,7 @@ public class AnimalShelter {
 
     public void searchPartial(String name) {
         for (Animal animal : animalList) {
-            if (animal.name.contains(name)) {
+            if (animal.name.contains(name.toLowerCase())) {
                 System.out.println(animal.species + " " + animal.name + " was found: " + animalList.indexOf(animal));
             }
         }
