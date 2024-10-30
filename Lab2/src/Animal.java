@@ -23,10 +23,19 @@ public class Animal implements Comparable<Animal>{
     }
 
     @Override
-    public int compareTo(Animal animal) {
-        if(Objects.equals(this.name, animal.name) && this.age == animal.age && Objects.equals(this.species, animal.species))
-            return 0;
-      return 1;
+    public int compareTo(Animal other) {
+        int nameCompare = this.name.compareTo(other.name);
+        if (nameCompare != 0) {
+            return nameCompare;
+        }
+
+        int speciesCompare = this.species.compareTo(other.species);
+        if (speciesCompare != 0) {
+            return speciesCompare;
+        }
+
+        return Integer.compare(this.age, other.age);
     }
+
 }
 

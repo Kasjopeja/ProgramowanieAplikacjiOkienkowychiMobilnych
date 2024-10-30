@@ -16,9 +16,11 @@ public class AnimalShelter {
             return;
         }
 
-        if (animalList.contains(animal)) {
-            System.out.println(animal.species + " " + animal.name + " already present in shelter.");
-            return;
+        for (Animal existingAnimal : animalList) {
+            if (existingAnimal.compareTo(animal) == 0) {
+                System.out.println(animal.species + " " + animal.name + " with the same parameters is already present in the shelter.");
+                return;
+            }
         }
 
         animalList.add(animal);
@@ -57,7 +59,7 @@ public class AnimalShelter {
     public void countByCondition(AnimalCondition condition) {
         int i = 0;
         for (Animal animal : animalList) {
-            if (animal.condition == condition) {
+            if (animal.condition.equals(condition)) {
                 i = i + 1;
             }
         }
