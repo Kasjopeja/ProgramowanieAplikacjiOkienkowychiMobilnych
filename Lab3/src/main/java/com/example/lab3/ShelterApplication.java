@@ -20,7 +20,7 @@ public class ShelterApplication extends Application {
     {
         FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        ShelterController controller = fxmlLoader.getController();
+        LoginController controller = fxmlLoader.getController();
         controller.setMainApp(this);
         primaryStage.setTitle("Hello!");
         primaryStage.setScene(scene);
@@ -29,9 +29,9 @@ public class ShelterApplication extends Application {
 
     public void showLoginScreen() throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        ShelterController controller = fxmlLoader.getController();
+        LoginController controller = fxmlLoader.getController();
         controller.setMainApp(this);
         primaryStage.setTitle("Login");
         primaryStage.setScene(scene);
@@ -42,6 +42,8 @@ public class ShelterApplication extends Application {
     {
         FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("user-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        UserController controller = fxmlLoader.getController();
+        controller.setMainApp(this);
         primaryStage.setTitle("User View");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -51,6 +53,8 @@ public class ShelterApplication extends Application {
     {
         FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("admin-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        AdminController controller = fxmlLoader.getController();
+        controller.setMainApp(this);
         primaryStage.setTitle("Admin View");
         primaryStage.setScene(scene);
         primaryStage.show();

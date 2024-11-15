@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 
-public class ShelterController {
+public class LoginController {
 
     //---------
     @FXML

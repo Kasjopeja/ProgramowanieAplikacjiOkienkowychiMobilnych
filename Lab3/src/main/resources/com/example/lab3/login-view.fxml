@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab3.LoginController">
+    <Label style="-fx-font-size: 20px;" text="Login" />
+    <TextField fx:id="usernameField" promptText="Username">
+      <VBox.margin>
+         <Insets left="30.0" right="30.0" />
+      </VBox.margin></TextField>
+    <PasswordField fx:id="passwordField" promptText="Password">
+      <VBox.margin>
+         <Insets left="30.0" right="30.0" />
+      </VBox.margin></PasswordField>
+    <HBox spacing="10">
+        <Button fx:id="LoginButton" contentDisplay="TOP" onAction="#handleLogin" text="Login" textAlignment="CENTER">
+         <HBox.margin>
+            <Insets left="40.0" />
+         </HBox.margin></Button>
+    </HBox>
+</VBox>
