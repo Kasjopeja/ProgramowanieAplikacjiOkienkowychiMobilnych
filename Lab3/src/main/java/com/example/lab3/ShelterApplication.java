@@ -12,7 +12,8 @@ public class ShelterApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        showHelloView();
+        //showHelloView();
+        showLoginScreen();
     }
 
     public void showHelloView() throws Exception
