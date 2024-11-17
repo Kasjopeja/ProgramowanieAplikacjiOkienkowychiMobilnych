@@ -47,5 +47,9 @@ public class Animal implements Comparable<Animal>{
     public AnimalCondition getCondition() {
         return condition;
     }
+
+    public int getAge() {
+        return age;
+    }
 }
 

@@ -15,7 +15,7 @@ public class ShelterManager {
 
     public void addShelter(String name, int capacity) {
         AnimalShelter shelter = new AnimalShelter(name, capacity);
-        shelters.put(name, shelter);
+        shelters.put(name.toLowerCase(), shelter);
     }
 
     public void removeShelter(String name) {

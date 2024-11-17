@@ -14,20 +14,22 @@ public class AnimalShelter {
 
     public void addAnimal(Animal animal) {
         if (animalList.size() >= maxCapacity) {
-            System.err.println("No more room in the shelter available");
-            return;
+            throw new IllegalStateException("No more room in the shelter available");
         }
 
+        // Sprawdzanie, czy zwierzę o takich samych parametrach już istnieje w schronisku
         for (Animal existingAnimal : animalList) {
-            if (existingAnimal.compareTo(animal) == 0) {
+            if (existingAnimal.equals(animal)) { // Użycie equals zamiast compareTo
                 System.out.println(animal.species + " " + animal.name + " with the same parameters is already present in the shelter.");
                 return;
             }
         }
 
+        // Dodanie zwierzęcia do listy
         animalList.add(animal);
-        System.out.println(animal.species + " " + animal .name+ " was added to the shelter.");
+        System.out.println(animal.species + " " + animal.name + " was added to the shelter.");
     }
+
 
     public void removeAnimal(Animal animal) {
         if (animalList.contains(animal)) {
