@@ -1,8 +1,5 @@
 package com.example.lab3;
 
-import java.util.Locale;
-import java.util.Objects;
-
 public class Animal implements Comparable<Animal>{
     String name;
     String species;
@@ -39,5 +36,16 @@ public class Animal implements Comparable<Animal>{
         return Integer.compare(this.age, other.age);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public AnimalCondition getCondition() {
+        return condition;
+    }
 }
 

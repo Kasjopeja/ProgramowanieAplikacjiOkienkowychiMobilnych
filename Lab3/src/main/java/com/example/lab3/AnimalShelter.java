@@ -111,4 +111,9 @@ public class AnimalShelter {
     public String getName() {
         return shelterName;
     }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
 }

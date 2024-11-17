@@ -1,19 +1,16 @@
 package com.example.lab3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShelterManager {
     Map<String, AnimalShelter> shelters;
 
-    public void addToShelter(String name, Animal animal) {
-        this.shelters.get(name).addAnimal(animal);
+    public ShelterManager() {
+        this.shelters = new LinkedHashMap<>(); // Zmiana HashMap na LinkedHashMap
     }
 
-    public ShelterManager() {
-        this.shelters = new HashMap<>();
+    public void addToShelter(String name, Animal animal) {
+        this.shelters.get(name).addAnimal(animal);
     }
 
     public void addShelter(String name, int capacity) {
@@ -36,7 +33,9 @@ public class ShelterManager {
 
     public void summary() {
         for (Map.Entry<String, AnimalShelter> entry : shelters.entrySet()) {
-            System.out.println(entry.getValue().shelterName + " is " + String.format("%.2f", (double)(entry.getValue().animalList.size()) / (double) (entry.getValue().maxCapacity) * 100) + "% full");
+            System.out.println(entry.getValue().shelterName + " is " +
+                    String.format("%.2f", (double) (entry.getValue().animalList.size()) / (double) (entry.getValue().maxCapacity) * 100) +
+                    "% full");
         }
     }
 
