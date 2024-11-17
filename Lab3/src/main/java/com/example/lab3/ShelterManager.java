@@ -14,9 +14,14 @@ public class ShelterManager {
     }
 
     public void addShelter(String name, int capacity) {
+        String lowerCaseName = name.toLowerCase();
+        if (shelters.containsKey(lowerCaseName)) {
+            throw new IllegalArgumentException("Shelter with the same name already exists.");
+        }
         AnimalShelter shelter = new AnimalShelter(name, capacity);
-        shelters.put(name.toLowerCase(), shelter);
+        shelters.put(lowerCaseName, shelter);
     }
+
 
     public void removeShelter(String name) {
         shelters.remove(name.toLowerCase());
@@ -40,8 +45,9 @@ public class ShelterManager {
     }
 
     public AnimalShelter getShelterByName(String shelterName) {
-        return shelters.get(shelterName);
+        return shelters.get(shelterName.toLowerCase());
     }
+
 
     public List<AnimalShelter> getAllShelters() {
         return new ArrayList<>(shelters.values());
