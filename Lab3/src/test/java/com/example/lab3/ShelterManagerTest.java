@@ -21,7 +21,7 @@ class ShelterManagerTest {
     @Test
     void testAddShelter() {
         shelterManager.addShelter("New Shelter", 10);
-        AnimalShelter newShelter = shelterManager.getShelterByName("New Shelter");
+        AnimalShelter newShelter = shelterManager.getShelterByName("new shelter");
         assertNotNull(newShelter, "New shelter should be added successfully.");
         assertEquals(10, newShelter.getMaxCapacity(), "New shelter should have the correct capacity.");
     }
@@ -34,7 +34,7 @@ class ShelterManagerTest {
 
     @Test
     void testGetShelterByName() {
-        AnimalShelter shelter = shelterManager.getShelterByName("Happy Paws");
+        AnimalShelter shelter = shelterManager.getShelterByName("happy paws");
         assertNotNull(shelter, "Shelter should exist.");
         assertEquals(5, shelter.getMaxCapacity(), "Shelter should have correct capacity.");
     }

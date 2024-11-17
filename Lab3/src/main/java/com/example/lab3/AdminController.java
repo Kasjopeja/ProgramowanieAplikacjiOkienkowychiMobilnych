@@ -76,7 +76,7 @@ public class AdminController {
         SwingUtilities.invokeLater(() -> {
             // Sprawdź, czy obiekt shelter jest null
             if (shelter == null) {
-                System.err.println("Shelter is null. Cannot create animal table.");
+               //System.err.println("Shelter is null. Cannot create animal table.");
                 swingNode.setContent(new JLabel("No shelter selected.")); // Wyświetl komunikat w SwingNode
                 return;
             }
@@ -237,6 +237,7 @@ public class AdminController {
 
     private void refreshSheltersComboBox() {
         SwingUtilities.invokeLater(() -> {
+            // Teraz zawartość SwingNode jest na pewno JComboBox<String>
             JComboBox<String> comboBox = (JComboBox<String>) shelterSelectionNode.getContent();
             if (comboBox != null) {
                 List<AnimalShelter> shelters = data.shelterManager.getAllShelters();
@@ -293,6 +294,24 @@ public class AdminController {
             JScrollPane scrollPane = new JScrollPane(animalTable);
 
             animalsNode.setContent(scrollPane);
+        });
+    }
+
+    public void handlSortShelter()
+    {
+        SwingUtilities.invokeLater(() -> {
+            // Pobierz zawartość SwingNode jako JComboBox
+            JComboBox<String> comboBox = (JComboBox<String>) shelterSelectionNode.getContent();
+            if (comboBox != null) {
+                // Pobierz listę schronisk i posortuj według pojemności
+                List<AnimalShelter> shelters = data.shelterManager.getAllShelters();
+                shelters.sort(Comparator.comparingInt(AnimalShelter::getMaxCapacity)); // Sortowanie rosnące według maxCapacity
+
+                comboBox.removeAllItems(); // Usuń istniejące elementy
+                for (AnimalShelter shelter : shelters) {
+                    comboBox.addItem(shelter.getName()); // Dodaj elementy w posortowanej kolejności
+                }
+            }
         });
     }
 

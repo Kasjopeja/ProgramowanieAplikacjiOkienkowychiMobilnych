@@ -45,7 +45,7 @@ public class ShelterManager {
     }
 
     public AnimalShelter getShelterByName(String shelterName) {
-        return shelters.get(shelterName.toLowerCase());
+        return shelters.get(shelterName);
     }
 
 
