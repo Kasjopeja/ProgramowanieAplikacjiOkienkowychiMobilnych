@@ -107,4 +107,8 @@ public class AnimalShelter {
     public List<Animal> getAnimalList() {
         return animalList;
     }
+
+    public String getName() {
+        return shelterName;
+    }
 }

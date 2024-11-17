@@ -11,46 +11,47 @@ public class UserController {
     private ShelterApplication mainApp;
 
     @FXML
-    private SwingNode sheltersNode;
-
-    @FXML
     private SwingNode animalsNode;
 
+    @FXML
+    private SwingNode shelterSelectionNode;
+
+    private ExampleData data;
 
     @FXML
     public void initialize() {
-        ExampleData data = new ExampleData();
+        data = new ExampleData();
         data.load();
-        createShelterJTable(sheltersNode, data);
-        createAnimalJTable(animalsNode, data);
+
+        createShelterSelection(shelterSelectionNode);
+        createAnimalJTable(animalsNode, data.getDeafultShelter());
     }
 
     public void setMainApp(ShelterApplication mainApp) {
         this.mainApp = mainApp;
     }
 
-    private void createShelterJTable(SwingNode swingNode, ExampleData data) {
+    private void createShelterSelection(SwingNode swingNode) {
         SwingUtilities.invokeLater(() -> {
             List<AnimalShelter> shelters = data.shelterManager.getAllShelters();
 
-            GenericTableModel<AnimalShelter> animalTableModel = new GenericTableModel<>(AnimalShelter.class);
-            animalTableModel.setExcludedColumns(List.of("animalList")); // Wykluczenie kolumny
-            animalTableModel.setData(shelters);
+            JComboBox<String> shelterComboBox = new JComboBox<>();
+            for (AnimalShelter shelter : shelters) {
+                shelterComboBox.addItem(shelter.getName());
+            }
 
-            JTable animalShelterTable = new JTable(animalTableModel);
-            animalShelterTable.setFillsViewportHeight(true);
+            shelterComboBox.addActionListener(e -> {
+                String selectedShelterName = (String) shelterComboBox.getSelectedItem();
+                AnimalShelter selectedShelter = data.shelterManager.getShelterByName(selectedShelterName);
+                createAnimalJTable(animalsNode, selectedShelter);
+            });
 
-            JScrollPane scrollPane = new JScrollPane(animalShelterTable);
-
-            swingNode.setContent(scrollPane);
-
+            swingNode.setContent(shelterComboBox);
         });
     }
 
-    private void createAnimalJTable(SwingNode swingNode, ExampleData data) {
+    private void createAnimalJTable(SwingNode swingNode, AnimalShelter shelter) {
         SwingUtilities.invokeLater(() -> {
-            AnimalShelter shelter = data.getShelter();
-
             GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
             animalTableModel.setData(shelter.getAnimalList());
 
@@ -62,5 +63,4 @@ public class UserController {
             swingNode.setContent(scrollPane);
         });
     }
-
 }
