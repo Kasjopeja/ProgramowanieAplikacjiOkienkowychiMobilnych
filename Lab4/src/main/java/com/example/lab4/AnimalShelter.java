@@ -13,20 +13,20 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AnimalShelters")
+@Table(name = "animal_shelter")
 public class AnimalShelter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "shelterName", nullable = false)
+    @Column(name = "name", nullable = false)
     String shelterName;
 
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Animal> animalList = new ArrayList<>();
 
-    @Column(name = "maxCapacity", nullable = false)
+    @Column(name = "capacity", nullable = false)
     int maxCapacity;
 
     AnimalShelter(String shelterName, int maxCapacity) {

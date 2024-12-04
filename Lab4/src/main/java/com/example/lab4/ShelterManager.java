@@ -26,9 +26,9 @@ public class ShelterManager {
         return shelters.get(shelterName);
     }
 
-
     public List<AnimalShelter> getAllShelters() {
         return new ArrayList<>(shelters.values());
     }
+
 
 }

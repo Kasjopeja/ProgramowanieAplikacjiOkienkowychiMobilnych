@@ -26,7 +26,7 @@
         <property name="hibernate.format_sql">true</property> <!-- Formatuje zapytania SQL -->
 
         <!-- Automatyczne generowanie schematu bazy danych -->
-        <property name="hibernate.hbm2ddl.auto">create-drop</property> <!-- "update" - aktualizuje schemat bazy danych, inne opcje to "create" i "create-drop" -->
+        <property name="hibernate.hbm2ddl.auto">update</property> <!-- "update" - aktualizuje schemat bazy danych, inne opcje to "create" i "create-drop" -->
 
         <!-- Wyłączenie cache'a -->
 <!--        <property name="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>-->

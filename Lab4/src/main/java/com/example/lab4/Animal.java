@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-@Table(name = "animals")
+@Table(name = "animal")
 @NoArgsConstructor
 public class Animal implements Comparable<Animal>, Serializable {
 
