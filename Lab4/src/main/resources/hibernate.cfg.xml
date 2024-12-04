@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+    <!-- Konfiguracja fabryki sesji -->
+    <session-factory>
+
+        <!-- Połączenie z bazą danych -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property> <!-- Dialekt bazy danych -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property> <!-- Klasa sterownika -->
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/shelterapplicationdb</property> <!-- URL bazy danych -->
+        <property name="hibernate.connection.username">shelteruser</property> <!-- Nazwa użytkownika -->
+        <property name="hibernate.connection.password">shelterpassword</property> <!-- Hasło -->
+
+        <!-- Pula połączeń -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+
+        <!-- Zarządzanie kontekstem sesji -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- Pokazywanie zapytań SQL -->
+        <property name="hibernate.show_sql">true</property> <!-- Pokazuje zapytania SQL w konsoli -->
+        <property name="hibernate.format_sql">true</property> <!-- Formatuje zapytania SQL -->
+
+        <!-- Automatyczne generowanie schematu bazy danych -->
+        <property name="hibernate.hbm2ddl.auto">create-drop</property> <!-- "update" - aktualizuje schemat bazy danych, inne opcje to "create" i "create-drop" -->
+
+        <!-- Wyłączenie cache'a -->
+<!--        <property name="hibernate.cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>-->
+
+        <!-- Dodanie klas encji -->
+        <mapping class="com.example.lab4.Animal" />
+        <mapping class="com.example.lab4.AnimalShelter"/>
+<!--        <mapping class="com.example.lab4.Rating"/>-->
+
+    </session-factory>
+
+</hibernate-configuration>

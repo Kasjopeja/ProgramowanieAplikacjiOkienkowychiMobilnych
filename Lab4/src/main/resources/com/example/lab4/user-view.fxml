@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab4.UserController">
+
+    <Label layoutX="20.0" layoutY="15.0" style="-fx-font-size: 20px;" text="Chose shelter: " />
+    <SwingNode fx:id="animalsNode" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
+    <SwingNode fx:id="shelterSelectionNode" layoutX="150.0" layoutY="18.0" />
+
+    <TextField fx:id="filterTextBox" layoutX="890.0" layoutY="18.0" onKeyPressed="#handleFilterEnter" prefHeight="0.0" prefWidth="149.0" promptText="Enter text to filter" />
+    <ComboBox fx:id="stateComboBox" layoutX="1050.0" layoutY="18.0" onAction="#handleStateChange" />
+    <Label layoutX="895.0" layoutY="2.0" text="Name:" />
+    <Label layoutX="1055.0" layoutY="2.0" text="State:" />
+
+
+</AnchorPane>
