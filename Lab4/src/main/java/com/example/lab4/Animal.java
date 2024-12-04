@@ -41,13 +41,14 @@ public class Animal implements Comparable<Animal>, Serializable {
     @JoinColumn(name = "shelter_id", nullable = false)
     private AnimalShelter shelter;
 
-    public Animal(String name, String species, int age, double price, double weight, AnimalCondition condition) {
+    public Animal(String name, String species, int age, double price, double weight, AnimalCondition condition, AnimalShelter shelter) {
         this.name = name.toLowerCase();
         this.species = species.toLowerCase();
         this.age = age;
         this.price = price;
         this.weight = weight;
         this.condition = condition;
+        this.shelter = shelter;
     }
 
     public void print() {

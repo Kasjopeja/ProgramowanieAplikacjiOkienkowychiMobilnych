@@ -5,20 +5,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import lombok.Setter;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
-import java.util.*;
+import java.awt.*;
+import java.util.List;
 
 public class AdminController {
 
@@ -56,12 +54,11 @@ public class AdminController {
         currentShelter = shelters.get(0); // Domyślne schronisko
         createAnimalJTable(animalsNode, currentShelter);
 
-        //createShelterSelection(shelterSelectionNode);
+        createShelterSelection(shelterSelectionNode);
         //stateComboBox.getItems().addAll("Zdrowe", "Chore", "Kwarantanna", "WTrakcieAdopcji");
         //stateComboBox.setValue("Zdrowe"); // Ustaw wartość domyślną
 
     }
-
 
     private void createAnimalJTable(SwingNode swingNode, AnimalShelter shelter) {
         SwingUtilities.invokeLater(() -> {
@@ -105,126 +102,207 @@ public class AdminController {
         });
     }
 
+    private void createShelterSelection(SwingNode swingNode) {
+        SwingUtilities.invokeLater(() -> {
+            // Tworzymy JComboBox, w którym przechowujemy obiekty AnimalShelter
+            JComboBox<AnimalShelter> shelterComboBox = new JComboBox<>();
 
-//    private void createShelterSelection(SwingNode swingNode) {
-//        SwingUtilities.invokeLater(() -> {
-//            List<AnimalShelter> shelters = data.shelterManager.getAllShelters();
-//
-//            JComboBox<String> shelterComboBox = new JComboBox<>();
-//            for (AnimalShelter shelter : shelters) {
-//                shelterComboBox.addItem(shelter.getShelterName());
-//            }
-//
-//            shelterComboBox.addActionListener(e -> {
-//                String selectedShelterName = (String) shelterComboBox.getSelectedItem();
-//                currentShelter = data.shelterManager.getShelterByName(selectedShelterName);
-//                createAnimalJTable(animalsNode, currentShelter);
-//            });
-//
-//            swingNode.setContent(shelterComboBox);
-//        });
-//    }
-//
-//
-//    @FXML
-//    private void handleEdit() {
-//        int selectedRow = animalTable.getSelectedRow();
-//        if (selectedRow != -1) {
-//            Animal animal = currentShelter.getAnimalList().get(selectedRow);
-//
-//            // Otwórz okno edycji
-//            boolean saveClicked = showEditDialog(animal);
-//            if (saveClicked) {
-//                refreshTable(); // Odśwież tabelę po zapisaniu zmian
-//            }
-//        } else {
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("Edit Error");
-//            alert.setHeaderText("No Animal Selected");
-//            alert.setContentText("Please select an animal to edit.");
-//            alert.showAndWait();
-//        }
-//    }
-//
-//    @FXML
-//    private void handleAdd() {
-//        // Stwórz nowe zwierzę z domyślnymi wartościami
-//        Animal newAnimal = new Animal("New Animal", "Unknown", 0, 0.0, 0.0, AnimalCondition.Zdrowe);
-//
-//        // Otwórz okno dodawania
-//        boolean saveClicked = showEditDialog(newAnimal);
-//        if (saveClicked) {
-//            currentShelter.addAnimal(newAnimal); // Dodaj nowe zwierzę do aktualnego schroniska
-//            refreshTable(); // Odśwież tabelę po dodaniu nowego zwierzęcia
-//        }
-//    }
-//
-//    private boolean showEditDialog(Animal animal) {
-//        try {
-//            // Załaduj plik FXML
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("animal-dialog-view.fxml"));
-//            VBox page = loader.load();
-//
-//            // Stwórz okno dialogowe
-//            Stage dialogStage = new Stage();
-//            dialogStage.setTitle("Edit Animal");
-//            dialogStage.initModality(Modality.WINDOW_MODAL);
-//            dialogStage.setScene(new Scene(page));
-//
-//            // Przekaż dane do kontrolera
-//            AnimalDialogController controller = loader.getController();
-//            controller.setDialogStage(dialogStage);
-//            controller.setAnimal(animal);
-//
-//            // Wyświetl okno i czekaj na zamknięcie
-//            dialogStage.showAndWait();
-//            return controller.isSaveClicked();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-//
-//    @FXML
-//    private void handleDelete() {
-//        SwingUtilities.invokeLater(() -> {
-//            int selectedRow = animalTable.getSelectedRow();
-//            if (selectedRow != -1) {
-//                Animal animal = currentShelter.getAnimalList().get(selectedRow);
-//
-//                // Potwierdzenie usunięcia
-//                int confirmation = JOptionPane.showConfirmDialog(
-//                        null,
-//                        "Are you sure you want to delete " + animal.name + "?",
-//                        "Delete Confirmation",
-//                        JOptionPane.YES_NO_OPTION
-//                );
-//
-//                if (confirmation == JOptionPane.YES_OPTION) {
-//                    currentShelter.removeAnimal(animal);
-//
-//                    // Wyświetlenie potwierdzenia usunięcia
-//                    JOptionPane.showMessageDialog(
-//                            null,
-//                            "The animal \"" + animal.name + "\" has been successfully deleted.",
-//                            "Deletion Successful",
-//                            JOptionPane.INFORMATION_MESSAGE
-//                    );
-//
-//                    refreshTable(); // Odśwież tabelę po usunięciu
-//                }
-//            } else {
-//                // Informacja, jeśli nie wybrano zwierzęcia
-//                JOptionPane.showMessageDialog(
-//                        null,
-//                        "No animal selected for deletion!",
-//                        "Deletion Error",
-//                        JOptionPane.WARNING_MESSAGE
-//                );
-//            }
-//        });
-//    }
+            // Dodajemy obiekty AnimalShelter do ComboBoxa
+            for (AnimalShelter shelter : shelters) {
+                shelterComboBox.addItem(shelter);
+            }
+
+            // Ustawienie renderer-a, aby wyświetlać tylko nazwy schronisk
+            shelterComboBox.setRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    // Jeśli element to obiekt AnimalShelter, wyświetl jego nazwę
+                    if (value instanceof AnimalShelter) {
+                        value = ((AnimalShelter) value).getShelterName(); // Wyświetlanie tylko nazwy
+                    }
+                    return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                }
+            });
+
+            // Akcja po wybraniu schroniska z ComboBoxa
+            shelterComboBox.addActionListener(e -> {
+                // Pobieramy pełny obiekt AnimalShelter na podstawie wyboru
+                AnimalShelter selectedShelter = (AnimalShelter) shelterComboBox.getSelectedItem();
+                if (selectedShelter != null) {
+                    currentShelter = selectedShelter;  // Ustawiamy wybrane schronisko
+                    createAnimalJTable(animalsNode, currentShelter);  // Tworzymy tabelę zwierząt dla wybranego schroniska
+                }
+            });
+
+            // Ustawiamy JComboBox jako zawartość SwingNode
+            swingNode.setContent(shelterComboBox);
+        });
+    }
+
+    private boolean showEditDialog(Animal animal) {
+        try {
+            // Załaduj plik FXML
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("animal-dialog-view.fxml"));
+            VBox page = loader.load();
+
+            // Stwórz okno dialogowe
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Animal");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setScene(new Scene(page));
+
+            // Przekaż dane do kontrolera
+            AnimalDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setAnimal(animal);
+
+            // Wyświetl okno i czekaj na zamknięcie
+            dialogStage.showAndWait();
+            return controller.isSaveClicked();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @FXML
+    private void handleEdit() {
+        int selectedRow = animalTable.getSelectedRow();
+        if (selectedRow != -1) {
+            // Pobierz zwierzę z bazy danych
+            Animal animal = currentShelter.getAnimalList().get(selectedRow);
+
+            // Otwórz okno edycji
+            boolean saveClicked = showEditDialog(animal);
+            if (saveClicked) {
+                // Zapisz zmiany do bazy danych
+                try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                    session.beginTransaction();
+                    session.update(animal); // Aktualizuj obiekt w bazie danych
+                    session.getTransaction().commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                createAnimalJTable(animalsNode, currentShelter);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Edit Error");
+            alert.setHeaderText("No Animal Selected");
+            alert.setContentText("Please select an animal to edit.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleAdd() {
+        // Stwórz nowe zwierzę z domyślnymi wartościami
+        Animal newAnimal = new Animal("New Animal", "Unknown", 0, 0.0, 0.0, AnimalCondition.Zdrowe, currentShelter);
+
+        // Otwórz okno edycji
+        boolean saveClicked = showEditDialog(newAnimal);
+        if (saveClicked) {
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                session.beginTransaction();
+
+                // Zapisz nowe zwierzę do bazy danych
+                session.save(newAnimal);
+                session.getTransaction().commit();
+
+                // Wyświetlenie potwierdzenia dodania
+                JOptionPane.showMessageDialog(
+                        null,
+                        "The animal \"" + newAnimal.getName() + "\" has been successfully added.",
+                        "Addition Successful",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                // Dodaj nowe zwierzę do listy w currentShelter
+                currentShelter.getAnimalList().add(newAnimal);
+
+                // Zaktualizowanie tabeli po dodaniu nowego zwierzęcia
+                createAnimalJTable(animalsNode, currentShelter); // Zaktualizowanie tabeli po dodaniu zwierzęcia
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Wyświetlenie błędu, jeśli dodawanie nie powiedzie się
+                JOptionPane.showMessageDialog(
+                        null,
+                        "An error occurred while adding the animal.",
+                        "Addition Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+
+    @FXML
+    private void handleDelete() {
+        SwingUtilities.invokeLater(() -> {
+            int selectedRow = animalTable.getSelectedRow();
+            if (selectedRow != -1) {
+                // Pobierz wybrane zwierzę z tabeli
+                Animal animal = currentShelter.getAnimalList().get(selectedRow);
+
+                // Potwierdzenie usunięcia
+                int confirmation = JOptionPane.showConfirmDialog(
+                        null,
+                        "Are you sure you want to delete " + animal.getName() + "?",
+                        "Delete Confirmation",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirmation == JOptionPane.YES_OPTION) {
+                    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                        session.beginTransaction();
+
+                        // Pobierz zwierzę z bazy danych
+                        Animal animalToDelete = session.get(Animal.class, animal.getId());
+                        if (animalToDelete != null) {
+                            session.delete(animalToDelete); // Usuń zwierzę z bazy danych
+                            session.getTransaction().commit();
+
+                            // Wyświetlenie potwierdzenia usunięcia
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "The animal \"" + animal.getName() + "\" has been successfully deleted.",
+                                    "Deletion Successful",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+
+                            // Usuń zwierzę z listy w aktualnym schronisku (currentShelter)
+                            currentShelter.getAnimalList().remove(animal); // Usuń zwierzę z listy
+
+                            // Zaktualizowanie tabeli po usunięciu
+                            createAnimalJTable(animalsNode, currentShelter); // Zaktualizowanie tabeli po usunięciu zwierzęcia
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // Wyświetlenie błędu, jeśli usunięcie nie powiedzie się
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "An error occurred while deleting the animal.",
+                                "Deletion Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            } else {
+                // Informacja, jeśli nie wybrano zwierzęcia
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No animal selected for deletion!",
+                        "Deletion Error",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }
+        });
+    }
+
+
+
+
 //
 //    @FXML
 //    private void handleAddShelter() {
