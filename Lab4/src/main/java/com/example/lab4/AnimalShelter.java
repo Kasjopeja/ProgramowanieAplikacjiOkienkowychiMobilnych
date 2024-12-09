@@ -23,7 +23,7 @@ public class AnimalShelter {
     @Column(name = "name", nullable = false)
     String shelterName;
 
-    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Animal> animalList = new ArrayList<>();
 
     @Column(name = "capacity", nullable = false)
