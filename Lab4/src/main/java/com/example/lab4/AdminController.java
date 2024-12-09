@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdminController {
@@ -44,9 +45,8 @@ public class AdminController {
     private JTable animalTable;
 
     private List<AnimalShelter> getAllShelters(Session session) {
-        return session.createQuery(
-                "SELECT DISTINCT s FROM AnimalShelter s LEFT JOIN FETCH s.animalList", AnimalShelter.class
-        ).getResultList();
+        return session.createQuery("FROM AnimalShelter", AnimalShelter.class)
+                .getResultList();
     }
 
 
@@ -60,43 +60,52 @@ public class AdminController {
         createAnimalJTable(animalsNode, currentShelter);
 
         createShelterSelection(shelterSelectionNode);
-//        stateComboBox.getItems().addAll("Zdrowe", "Chore", "Kwarantanna", "WTrakcieAdopcji");
-//        stateComboBox.setValue("Zdrowe"); // Ustaw wartość domyślną
+        stateComboBox.getItems().addAll("Zdrowe", "Chore", "Kwarantanna", "WTrakcieAdopcji");
+        stateComboBox.setValue("Zdrowe"); // Ustaw wartość domyślną
 
     }
 
     private void createAnimalJTable(SwingNode swingNode, AnimalShelter shelter) {
         SwingUtilities.invokeLater(() -> {
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                session.beginTransaction();
-
-                // Załaduj dane kolekcji w sesji
-                AnimalShelter managedShelter = session.get(AnimalShelter.class, shelter.getId());
-                List<Animal> animalList = managedShelter.getAnimalList();
-
-                if (animalList == null || animalList.isEmpty()) {
-                    swingNode.setContent(new JLabel("No animals in the shelter."));
-                    return;
-                }
-
-                // Stwórz model tabeli
-                GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
-                animalTableModel.setData(animalList);
-
-                JTable animalTable = new JTable(animalTableModel);
-                animalTable.setFillsViewportHeight(true);
-
-                JScrollPane scrollPane = new JScrollPane(animalTable);
-                swingNode.setContent(scrollPane);
-
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                e.printStackTrace();
-                swingNode.setContent(new JLabel("Error loading animals."));
+            // Sprawdź, czy obiekt shelter jest null
+            if (shelter == null) {
+                //System.err.println("Shelter is null. Cannot create animal table.");
+                swingNode.setContent(new JLabel("No shelter selected.")); // Wyświetl komunikat w SwingNode
+                return;
             }
+
+            // Pobierz listę zwierząt
+            List<Animal> animalList = shelter.getAnimalList();
+            if (animalList == null || animalList.isEmpty()) {
+                System.out.println("No animals in the selected shelter.");
+                swingNode.setContent(new JLabel("No animals in the shelter.")); // Wyświetl komunikat w SwingNode
+                return;
+            }
+
+            // Utwórz model tabeli
+            GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
+            animalTableModel.setData(animalList);
+
+            // Skonfiguruj JTable
+            animalTable = new JTable(animalTableModel);
+            animalTable.setFillsViewportHeight(true);
+
+            // Ukryj kolumnę shelter (indeks kolumny, np. 0 - jeśli to pierwsza kolumna)
+            int shelterColumnIndex = 7; // Zmień na odpowiedni indeks kolumny, którą chcesz ukryć
+            TableColumn shelterColumn = animalTable.getColumnModel().getColumn(shelterColumnIndex);
+            shelterColumn.setMaxWidth(0);
+            shelterColumn.setMinWidth(0);
+            shelterColumn.setPreferredWidth(0);
+            shelterColumn.setWidth(0);
+            animalTable.removeColumn(shelterColumn); // Usuń całkowicie tę kolumnę, jeśli nie chcesz jej wcale wyświetlać
+
+            // Umieść JTable w JScrollPane
+            JScrollPane scrollPane = new JScrollPane(animalTable);
+
+            // Ustaw JScrollPane jako zawartość SwingNode
+            swingNode.setContent(scrollPane);
         });
     }
-
 
     private void createShelterSelection(SwingNode swingNode) {
         SwingUtilities.invokeLater(() -> {
@@ -394,76 +403,89 @@ public class AdminController {
             }
 
             // Odśwież tabelę z wynikami filtrowania
-            SwingUtilities.invokeLater(() -> {
-                if (filteredAnimals == null || filteredAnimals.isEmpty()) {
-                    animalsNode.setContent(new JLabel("No animals found."));
-                    return;
-                }
-
-                // Stwórz model tabeli z przefiltrowanymi zwierzętami
-                GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
-                animalTableModel.setData(filteredAnimals);
-
-                JTable animalTable = new JTable(animalTableModel);
-                animalTable.setFillsViewportHeight(true);
-
-                JScrollPane scrollPane = new JScrollPane(animalTable);
-                animalsNode.setContent(scrollPane);
-            });
+            refreshAnimalTable();
         }
     }
 
-//    @FXML
-//    private void handleStateChange() {
-//        String selectedState = stateComboBox.getValue();
-//
-//        // Filtrowanie zwierząt na podstawie stanu
-//        filteredAnimals = currentShelter.getAnimalList().stream()
-//                .filter(animal -> animal.getCondition().toString().equalsIgnoreCase(selectedState))
-//                .toList();
-//
-//        // Odśwież tabelę z wynikami filtrowania
-//        refreshAnimalTable();
-//    }
-//
-//    private void refreshAnimalTable() {
-//        SwingUtilities.invokeLater(() -> {
-//            if (filteredAnimals == null || filteredAnimals.isEmpty()) {
-//                animalsNode.setContent(new JLabel("No animals found."));
-//                return;
-//            }
-//
-//            GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
-//            animalTableModel.setData(filteredAnimals);
-//
-//            JTable animalTable = new JTable(animalTableModel);
-//            animalTable.setFillsViewportHeight(true);
-//
-//            JScrollPane scrollPane = new JScrollPane(animalTable);
-//
-//            animalsNode.setContent(scrollPane);
-//        });
-//    }
-//
-//    public void handleSortShelter()
-//    {
-//        SwingUtilities.invokeLater(() -> {
-//            // Pobierz zawartość SwingNode jako JComboBox
-//            JComboBox<String> comboBox = (JComboBox<String>) shelterSelectionNode.getContent();
-//            if (comboBox != null) {
-//                // Pobierz listę schronisk i posortuj według pojemności
-//                List<AnimalShelter> shelters = data.shelterManager.getAllShelters();
-//                shelters.sort(Comparator.comparingInt(AnimalShelter::getMaxCapacity)); // Sortowanie rosnące według maxCapacity
-//
-//                comboBox.removeAllItems(); // Usuń istniejące elementy
-//                for (AnimalShelter shelter : shelters) {
-//                    comboBox.addItem(shelter.getShelterName()); // Dodaj elementy w posortowanej kolejności
-//                }
-//            }
-//        });
-//    }
-//
-//    private void refreshTable() {
-//        createAnimalJTable(animalsNode, currentShelter);
-//    }
+    private void refreshAnimalTable() {
+        SwingUtilities.invokeLater(() -> {
+            if (filteredAnimals == null || filteredAnimals.isEmpty()) {
+                animalsNode.setContent(new JLabel("No animals found."));
+                return;
+            }
+
+            // Stwórz model tabeli z przefiltrowanymi zwierzętami
+            GenericTableModel<Animal> animalTableModel = new GenericTableModel<>(Animal.class);
+            animalTableModel.setData(filteredAnimals);
+
+            JTable animalTable = new JTable(animalTableModel);
+            animalTable.setFillsViewportHeight(true);
+
+            // Ukryj kolumnę shelter (indeks kolumny, np. 0 - jeśli to pierwsza kolumna)
+            int shelterColumnIndex = 7; // Zmień na odpowiedni indeks kolumny, którą chcesz ukryć
+            TableColumn shelterColumn = animalTable.getColumnModel().getColumn(shelterColumnIndex);
+            shelterColumn.setMaxWidth(0);
+            shelterColumn.setMinWidth(0);
+            shelterColumn.setPreferredWidth(0);
+            shelterColumn.setWidth(0);
+            animalTable.removeColumn(shelterColumn); // Usuń całkowicie tę kolumnę, jeśli nie chcesz jej wcale wyświetlać
+
+            JScrollPane scrollPane = new JScrollPane(animalTable);
+            animalsNode.setContent(scrollPane);
+        });
+    }
+
+    @FXML
+    private void handleStateChange() {
+        String selectedState = stateComboBox.getValue();
+
+        // Filtrowanie zwierząt na podstawie stanu
+        filteredAnimals = currentShelter.getAnimalList().stream()
+                .filter(animal -> animal.getCondition().toString().equalsIgnoreCase(selectedState))
+                .toList();
+
+        // Odśwież tabelę z wynikami filtrowania
+        refreshAnimalTable();
+    }
+
+    public void handleSortShelter() {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Pobierz zawartość SwingNode jako JComboBox
+                JComboBox<AnimalShelter> comboBox = (JComboBox<AnimalShelter>) shelterSelectionNode.getContent();
+                if (comboBox != null) {
+                    // Posortuj listę schronisk według pojemności
+                    shelters.sort(Comparator.comparingInt(AnimalShelter::getMaxCapacity)); // Sortowanie rosnące według maxCapacity
+
+                    // Odśwież zawartość ComboBox
+                    updateComboBox(comboBox);
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Loguj wyjątki
+                SwingUtilities.invokeLater(() ->
+                        shelterSelectionNode.setContent(new JLabel("Error loading shelters.")) // Wyświetl komunikat o błędzie
+                );
+            }
+        });
+    }
+
+    private void updateComboBox(JComboBox<AnimalShelter> comboBox) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            SwingUtilities.invokeLater(() -> {
+                comboBox.removeAllItems(); // Usuń istniejące elementy
+                for (AnimalShelter shelter : shelters) {
+                    comboBox.addItem(shelter); // Dodaj pełne obiekty klasy AnimalShelter
+                }
+                createShelterSelection(shelterSelectionNode); // Utwórz widok selekcji schroniska
+            });
+        } catch (Exception e) {
+            e.printStackTrace(); // Loguj wyjątki
+            SwingUtilities.invokeLater(() ->
+                    shelterSelectionNode.setContent(new JLabel("Error loading shelters.")) // Wyświetl komunikat o błędzie
+            );
+        }
+    }
+
+
 }
+

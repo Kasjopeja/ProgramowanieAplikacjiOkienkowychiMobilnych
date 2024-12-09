@@ -8,16 +8,16 @@
 
     <Label layoutX="20.0" layoutY="15.0" style="-fx-font-size: 20px;" text="Choose shelter: " />
     <SwingNode fx:id="animalsNode" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
-    <SwingNode fx:id="shelterSelectionNode" layoutX="160.0" layoutY="18.0" />
+    <SwingNode fx:id="shelterSelectionNode" layoutX="170.0" layoutY="18.0" />
 
     <Button fx:id="addButton" layoutX="10.0" onAction="#handleAdd" prefWidth="80.0" text="Add" AnchorPane.bottomAnchor="15.0" />
     <Button fx:id="editButton" layoutX="100.0" onAction="#handleEdit" prefWidth="80.0" text="Edit" AnchorPane.bottomAnchor="15.0" />
     <Button fx:id="deleteButton" layoutX="190.0" onAction="#handleDelete" prefWidth="80.0" text="Delete" AnchorPane.bottomAnchor="15.0" />
     <Button fx:id="addShelterButton" layoutX="230.0" layoutY="18.0" onAction="#handleAddShelter" text="Add Shelter" />
-<!--    <Button fx:id="sortShelterButton" layoutX="300.0" layoutY="18.0" onAction="#handleSortShelter" text="Sort Shelter" />-->
+    <Button fx:id="sortShelterButton" layoutX="320.0" layoutY="18.0" onAction="#handleSortShelter" text="Sort Shelter" />
 
     <TextField fx:id="filterTextBox" layoutX="890.0" layoutY="18.0" onKeyPressed="#handleFilterEnter" prefHeight="30.0" prefWidth="149.0" promptText="Enter text to filter" />
-<!--    <ComboBox fx:id="stateComboBox" layoutX="1050.0" layoutY="18.0" onAction="#handleStateChange" />-->
+    <ComboBox fx:id="stateComboBox" layoutX="1050.0" layoutY="18.0" onAction="#handleStateChange" />
     <Label layoutX="895.0" layoutY="2.0" text="Name:" />
     <Label layoutX="1055.0" layoutY="2.0" text="State:" />
 

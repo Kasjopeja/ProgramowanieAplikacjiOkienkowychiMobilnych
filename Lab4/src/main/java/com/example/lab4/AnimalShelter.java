@@ -23,7 +23,7 @@ public class AnimalShelter {
     @Column(name = "name", nullable = false)
     String shelterName;
 
-    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Animal> animalList = new ArrayList<>();
 
     @Column(name = "capacity", nullable = false)
@@ -59,4 +59,10 @@ public class AnimalShelter {
             System.out.println(animal.species + " " + animal.name + " was removed from the shelter.");
         }
     }
+
+    @Override
+    public String toString() {
+        return shelterName; // Zwraca nazwę schroniska do wyświetlenia w JComboBox
+    }
+
 }

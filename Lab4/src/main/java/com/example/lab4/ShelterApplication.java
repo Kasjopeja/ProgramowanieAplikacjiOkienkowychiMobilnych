@@ -38,16 +38,16 @@ public class ShelterApplication extends Application {
         primaryStage.show();
     }
 
-//    public void showUserScreen() throws Exception
-//    {
-//        FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("user-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
-//        UserController controller = fxmlLoader.getController();
-//        controller.setMainApp(this);
-//        primaryStage.setTitle("User View");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//    }
+    public void showUserScreen() throws Exception
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(ShelterApplication.class.getResource("user-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+        UserController controller = fxmlLoader.getController();
+        controller.setMainApp(this);
+        primaryStage.setTitle("User View");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
     public void showAdminScreen() throws Exception
     {

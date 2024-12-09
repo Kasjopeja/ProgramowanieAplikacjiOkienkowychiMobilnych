@@ -32,7 +32,7 @@ public class LoginController {
     @FXML
     private void handleLogin() throws Exception {
         if (usernameField.getText().equals("user") && passwordField.getText().equals("userpass")) {
-            //mainApp.showUserScreen();
+            mainApp.showUserScreen();
         }
         else if (usernameField.getText().equals("admin") && passwordField.getText().equals("adminpass")) {
             mainApp.showAdminScreen();
