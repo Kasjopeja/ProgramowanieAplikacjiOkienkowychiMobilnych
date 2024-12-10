@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "animal_shelter")
-public class AnimalShelter {
+public class AnimalShelter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

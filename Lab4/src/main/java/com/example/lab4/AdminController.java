@@ -1,10 +1,12 @@
 package com.example.lab4;
 
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -21,6 +23,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class AdminController {
 
@@ -484,6 +487,58 @@ public class AdminController {
                     shelterSelectionNode.setContent(new JLabel("Error loading shelters.")) // Wyświetl komunikat o błędzie
             );
         }
+    }
+
+
+    public String dialog_str(String title, String header, String content){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        final String[] value = new String[1];
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(input -> {
+            value[0] = input;
+        });
+
+        return value[0];
+    }
+
+    public void handleSaveSheltersToFile() {
+        String fileName = dialog_str("Save binary file", "Enter File Name", "File Name:");
+        if (fileName == null || fileName.trim().isEmpty()) {
+            System.out.println("File name cannot be empty or null.");
+            return;
+        }
+        try {
+            SerializationUtil.saveToFile(fileName, shelters);
+            System.out.println("Shelters saved successfully to " + fileName);
+        } catch (Exception e) {
+            System.err.println("Failed to save shelters: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void handleLoadSheltersFromFile() {
+        String fileName = dialog_str("Load binary file", "Enter File Name", "File Name:");
+
+        if (fileName == null || fileName.trim().isEmpty()) {
+            System.out.println("File name cannot be empty.");
+            return;
+        }
+
+        List<AnimalShelter> loadedShelters = SerializationUtil.loadFromFile(fileName);
+
+        if (loadedShelters == null) {
+            System.out.println("Failed to load shelters. Please check the file.");
+            return;
+        }
+
+        System.out.println("Shelters loaded successfully from " + fileName);
+
+        shelters = loadedShelters;
+        createAnimalJTable(animalsNode, currentShelter);
     }
 
 
