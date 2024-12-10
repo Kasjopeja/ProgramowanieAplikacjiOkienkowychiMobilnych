@@ -1,6 +1,7 @@
 package com.example.lab4;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -541,6 +542,25 @@ public class AdminController {
         createAnimalJTable(animalsNode, currentShelter);
     }
 
+    public void handleExportAnimalsCsv() {
+        if (currentShelter == null) {
+            System.err.println("No shelter selected. Please select a shelter to export animals.");
+            return;
+        }
+        String fileName = dialog_str("CSV Animal", "Enter file name", "File name:" );
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Animal> animals = session.createQuery("from Animal where shelter.id = :shelterId", Animal.class)
+                .setParameter("shelterId", currentShelter.getId())
+                .list();
+        CsvUtil.exportAnimalsToCsv(fileName, animals);
+    }
 
+    public void handleExportShelterCsv() {
+        String fileName = dialog_str("CSV shelter", "Enter file name", "File name:" );
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<AnimalShelter> shelters = session.createQuery("from AnimalShelter", AnimalShelter.class).list();
+        ObservableList<AnimalShelter> shelters1 = FXCollections.observableArrayList(shelters);
+        CsvUtil.exportShelterToCsv(fileName, shelters1);
+    }
 }
 
