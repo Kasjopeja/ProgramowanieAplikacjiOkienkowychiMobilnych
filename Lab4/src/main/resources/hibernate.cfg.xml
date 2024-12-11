@@ -34,6 +34,7 @@
         <!-- Dodanie klas encji -->
         <mapping class="com.example.lab4.Animal" />
         <mapping class="com.example.lab4.AnimalShelter"/>
+        <mapping class="com.example.lab4.Rating"/>
 <!--        <mapping class="com.example.lab4.Rating"/>-->
 
     </session-factory>

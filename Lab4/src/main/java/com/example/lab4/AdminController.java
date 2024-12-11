@@ -21,6 +21,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.io.IOException;
@@ -625,6 +626,50 @@ public class AdminController {
             System.err.println("Error accessing the database: " + e.getMessage());
             throw e;
         }
+    }
+
+    private List<Rating> getRatings() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        return session.createQuery("FROM Rating", Rating.class)
+                .getResultList();
+    }
+
+    public void handleRating() {
+        // Pobranie ocen z bazy danych
+        List<Rating> ratings = getRatings();
+
+        // Tworzenie ramki głównej
+        JFrame frame = new JFrame("Ratings");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new BorderLayout());
+
+        // Nagłówki kolumn
+        String[] columnNames = {"ID", "Rating", "Shelter", "Date", "Comment"};
+
+        // Przygotowanie danych do tabeli
+        Object[][] data = new Object[ratings.size()][5];
+        for (int i = 0; i < ratings.size(); i++) {
+            Rating rating = ratings.get(i);
+            data[i][0] = rating.getId();
+            data[i][1] = rating.getRatingValue();
+            data[i][2] = rating.getShelter() != null ? rating.getShelter().getShelterName() : "Unknown";
+            data[i][3] = rating.getRatingDate();
+            data[i][4] = rating.getComment();
+        }
+
+        // Tworzenie modelu tabeli
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        JTable table = new JTable(tableModel);
+
+        // Dodanie tabeli do panelu przewijania
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Dodanie komponentów do ramki
+        frame.add(scrollPane, BorderLayout.CENTER);
+
+        // Wyświetlenie okna
+        frame.setVisible(true);
     }
 }
 
