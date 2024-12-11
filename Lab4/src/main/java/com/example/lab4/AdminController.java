@@ -18,10 +18,12 @@ import javafx.scene.control.TextField;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -555,12 +557,74 @@ public class AdminController {
         CsvUtil.exportAnimalsToCsv(fileName, animals);
     }
 
+    public void handleImportAnimalsCsv() throws IOException {
+        if (currentShelter == null) {
+            System.err.println("No shelter selected. Please select a shelter to import animals.");
+            return;
+        }
+        String fileName = dialog_str("CSV Animal", "Enter file name", "File name:" );
+        List<Animal> importedAnimals = CsvUtil.importAnimalsFromCsv(fileName);
+        currentShelter.setAnimalList(importedAnimals);
+        //saveAnimalsToDatabase(importedAnimals);
+        createAnimalJTable(animalsNode, currentShelter);
+    }
+
+    private void saveAnimalsToDatabase(List<Animal> importedAnimals) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            try {
+                for (Animal animal : importedAnimals) {
+                    session.saveOrUpdate(animal); // Save or update each animal
+                }
+                transaction.commit();
+                System.out.println("Animals saved successfully to the database.");
+            } catch (Exception e) {
+                transaction.rollback();
+                System.err.println("Error saving animals to the database: " + e.getMessage());
+                throw e;
+            }
+        } catch (Exception e) {
+            System.err.println("Error accessing the database: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
     public void handleExportShelterCsv() {
         String fileName = dialog_str("CSV shelter", "Enter file name", "File name:" );
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<AnimalShelter> shelters = session.createQuery("from AnimalShelter", AnimalShelter.class).list();
-        ObservableList<AnimalShelter> shelters1 = FXCollections.observableArrayList(shelters);
-        CsvUtil.exportShelterToCsv(fileName, shelters1);
+        List<AnimalShelter> exportshelters = session.createQuery("from AnimalShelter", AnimalShelter.class).list();
+        CsvUtil.exportShelterToCsv(fileName, exportshelters);
+    }
+
+    public void handleImportShelterCsv() {
+        String fileName = dialog_str("CSV shelter", "Enter file name", "File name:" );
+        shelters = CsvUtil.importShelterFromCsv(fileName, shelters);
+        //saveSheltersToDatabase();
+        createShelterSelection(shelterSelectionNode);
+    }
+
+    private void saveSheltersToDatabase() {
+        // Obtain a Hibernate Session
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            try {
+                for (AnimalShelter shelter : shelters) {
+                    session.saveOrUpdate(shelter); // Save new or update existing shelter
+                }
+                transaction.commit(); // Commit the transaction if all operations succeed
+                System.out.println("Shelters saved successfully to the database.");
+            } catch (Exception e) {
+                transaction.rollback(); // Rollback in case of any error
+                System.err.println("Error saving shelters to the database: " + e.getMessage());
+                throw e;
+            }
+        } catch (Exception e) {
+            System.err.println("Error accessing the database: " + e.getMessage());
+            throw e;
+        }
     }
 }
 

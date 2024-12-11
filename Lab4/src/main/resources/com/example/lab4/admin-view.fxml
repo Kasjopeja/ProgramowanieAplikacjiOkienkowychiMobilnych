@@ -17,7 +17,9 @@
     <Button fx:id="exportBinButton" layoutX="280.0" onAction="#handleSaveSheltersToFile" prefWidth="80.0" text="ExportBin" AnchorPane.bottomAnchor="15.0" />
     <Button fx:id="inportBinButton" layoutX="370.0" onAction="#handleLoadSheltersFromFile" prefWidth="80.0" text="InportBin" AnchorPane.bottomAnchor="15.0" />
     <Button fx:id="exporAnimalButton" layoutX="460.0" onAction="#handleExportAnimalsCsv" prefWidth="80.0" text="ExportAnimalCSV" AnchorPane.bottomAnchor="15.0" />
-    <Button fx:id="exportShelterButton" layoutX="550.0" onAction="#handleExportShelterCsv" prefWidth="80.0" text="ExportShelterCSV" AnchorPane.bottomAnchor="15.0" />
+    <Button fx:id="inportAnimalButton" layoutX="550.0" onAction="#handleImportAnimalsCsv" prefWidth="80.0" text="ImportAnimalCSV" AnchorPane.bottomAnchor="15.0" />
+    <Button fx:id="exportShelterButton" layoutX="640.0" onAction="#handleExportShelterCsv" prefWidth="80.0" text="ExportShelterCSV" AnchorPane.bottomAnchor="15.0" />
+    <Button fx:id="inportShelterButton" layoutX="730.0" onAction="#handleImportShelterCsv" prefWidth="80.0" text="ImportShelterCSV" AnchorPane.bottomAnchor="15.0" />
 
     <Button fx:id="addShelterButton" layoutX="230.0" layoutY="18.0" onAction="#handleAddShelter" text="Add Shelter" />
     <Button fx:id="sortShelterButton" layoutX="320.0" layoutY="18.0" onAction="#handleSortShelter" text="Sort Shelter" />

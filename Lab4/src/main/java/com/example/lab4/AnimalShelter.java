@@ -35,6 +35,12 @@ public class AnimalShelter implements Serializable {
         this.maxCapacity = maxCapacity;
     }
 
+    AnimalShelter(int id, String shelterName, int maxCapacity) {
+        this.id = (long) id;
+        this.shelterName = shelterName.toLowerCase();
+        this.maxCapacity = maxCapacity;
+    }
+
     public void addAnimal(Animal animal) {
         if (animalList.size() >= maxCapacity) {
             throw new IllegalStateException("No more room in the shelter available");
