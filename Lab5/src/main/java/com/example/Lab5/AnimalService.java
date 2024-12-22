@@ -1,5 +1,6 @@
 package com.example.Lab5;
 
+import io.micrometer.observation.ObservationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +29,22 @@ public class AnimalService {
         animal.setShelter(shelter);
         Animal savedAnimal = animalRepository.save(animal);
 
-        shelter.getAnimalList().add(savedAnimal);
         shelterRepository.save(shelter);
 
         return Optional.of(savedAnimal);
     }
+
+    public boolean deleteAnimal(Long id) {
+        if (animalRepository.existsById(id)) {
+            animalRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Optional<Animal> findAnimalById(Long id) {
+        return animalRepository.findById(id);
+    }
+
 }
