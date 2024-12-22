@@ -131,4 +131,11 @@ public class ApplicationControler {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+    
+    // GET api/rating
+    @GetMapping("/rating")
+    public ResponseEntity<Iterable<Rating>> getAllRatings() {
+        Iterable<Rating> ratings = ratingService.getAllRatings();
+        return ResponseEntity.ok(ratings);
+    }
 }

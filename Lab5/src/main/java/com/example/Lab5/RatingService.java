@@ -12,4 +12,8 @@ public class RatingService {
     public Rating saveRating(Rating rating) {
         return ratingRepository.save(rating);
     }
+
+    public Iterable<Rating> getAllRatings() {
+        return ratingRepository.findAll();
+    }
 }
