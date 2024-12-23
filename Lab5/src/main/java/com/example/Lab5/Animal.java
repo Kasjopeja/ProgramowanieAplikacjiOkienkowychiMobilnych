@@ -1,5 +1,6 @@
 package com.example.Lab5;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Animal{
 
     @ManyToOne
     @JoinColumn(name = "shelter_id", nullable = false)
+    @JsonBackReference
     private AnimalShelter shelter;
 
 }

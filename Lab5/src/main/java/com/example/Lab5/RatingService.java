@@ -16,4 +16,12 @@ public class RatingService {
     public Iterable<Rating> getAllRatings() {
         return ratingRepository.findAll();
     }
+
+    public boolean deleteRating(Long id) {
+        if (ratingRepository.existsById(id)) {
+            ratingRepository.deleteById(id);
+            return true;
+        }else
+            return false;
+    }
 }

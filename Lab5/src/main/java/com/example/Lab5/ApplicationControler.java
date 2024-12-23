@@ -138,4 +138,15 @@ public class ApplicationControler {
         Iterable<Rating> ratings = ratingService.getAllRatings();
         return ResponseEntity.ok(ratings);
     }
+
+    // DELETE api/rating
+    @DeleteMapping("/ratig/{id}")
+    public ResponseEntity<Void> deleteRating(@PathVariable Long id) {
+        boolean deleted = ratingService.deleteRating(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

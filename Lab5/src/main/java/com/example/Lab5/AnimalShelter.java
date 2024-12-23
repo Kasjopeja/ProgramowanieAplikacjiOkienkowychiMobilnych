@@ -1,5 +1,6 @@
 package com.example.Lab5;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class AnimalShelter implements Serializable {
     String shelterName;
 
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Animal> animalList = new ArrayList<>();
 
     @Column(name = "capacity", nullable = false)
