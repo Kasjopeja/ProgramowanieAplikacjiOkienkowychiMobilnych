@@ -140,7 +140,7 @@ public class ApplicationControler {
     }
 
     // DELETE api/rating
-    @DeleteMapping("/ratig/{id}")
+    @DeleteMapping("/rating/{id}")
     public ResponseEntity<Void> deleteRating(@PathVariable Long id) {
         boolean deleted = ratingService.deleteRating(id);
         if (deleted) {

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -42,12 +43,15 @@ class ApplicationControllerTests {
 
 	@BeforeEach
 	void setUp() {
+		// Czyszczenie repozytoriów przed każdym testem
+		ratingRepository.deleteAll();
 		shelterRepository.deleteAll();
-		// Tworzenie i zapisywanie istniejącego schroniska
-		AnimalShelter shelter = new AnimalShelter();
-		shelter.setShelterName("Schronisko Testowe");
-		shelter.setMaxCapacity(50);
-		existingShelter = shelterRepository.save(shelter);
+
+		// Inicjalizacja i zapis shelter
+		existingShelter = new AnimalShelter();
+		existingShelter.setShelterName("Schronisko Testowe");
+		existingShelter.setMaxCapacity(50);
+		shelterRepository.save(existingShelter);
 	}
 
 
@@ -461,5 +465,115 @@ class ApplicationControllerTests {
 				.andExpect(content().string("0.0"));
 	}
 
+	// 10. POST /api/rating
+	@Test
+	void addRating_WithValidData_ShouldReturnCreatedRating() throws Exception {
+		// Arrange: Tworzenie obiektu Rating z istniejącym shelter
+		Rating rating = new Rating();
+		rating.setRatingValue(5);
+		rating.setComment("Great shelter!");
+		rating.setRatingDate(LocalDate.now());
+
+		// Ustawienie shelter z existingShelter
+		existingShelter.setId(existingShelter.getId());
+		rating.setShelter(existingShelter);
+
+		// Serializacja obiektu Rating do JSON
+		String ratingJson = objectMapper.writeValueAsString(rating);
+
+		// Act & Assert: Wykonanie POST i oczekiwanie 201 Created z danymi ratingu
+		mockMvc.perform(post("/api/rating")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(ratingJson))
+				.andExpect(status().isCreated())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.id").isNumber())
+				.andExpect(jsonPath("$.ratingValue").value(5))
+				.andExpect(jsonPath("$.comment").value("Great shelter!"))
+				.andExpect(jsonPath("$.ratingDate").value(LocalDate.now().toString()))
+				.andExpect(jsonPath("$.shelter.id").value(existingShelter.getId()))
+				.andExpect(jsonPath("$.shelter.shelterName").value(existingShelter.getShelterName()));
+	}
+
+
+	// 11. GET /api/rating
+	@Test
+	void getAllRatings_WithData_ShouldReturnRatings() throws Exception {
+		// Arrange: Tworzenie i zapisywanie kilku ratingów
+		Rating rating1 = new Rating();
+		rating1.setRatingValue(5);
+		rating1.setComment("Excellent!");
+		rating1.setRatingDate(LocalDate.now());
+		rating1.setShelter(existingShelter);
+		ratingRepository.save(rating1);
+		shelterRepository.save(existingShelter);
+
+		Rating rating2 = new Rating();
+		rating2.setRatingValue(3);
+		rating2.setComment("Average shelter.");
+		rating2.setRatingDate(LocalDate.now().minusDays(1));
+		rating2.setShelter(existingShelter);
+		ratingRepository.save(rating2);
+		shelterRepository.save(existingShelter);
+
+		// Act & Assert: Wykonanie GET i oczekiwanie listy ratingów
+		mockMvc.perform(get("/api/rating"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$[0].id").value(rating1.getId()))
+				.andExpect(jsonPath("$[0].ratingValue").value(5))
+				.andExpect(jsonPath("$[0].comment").value("Excellent!"))
+				.andExpect(jsonPath("$[0].ratingDate").value(rating1.getRatingDate().toString()))
+				.andExpect(jsonPath("$[0].shelter.id").value(existingShelter.getId()))
+				.andExpect(jsonPath("$[0].shelter.shelterName").value(existingShelter.getShelterName()))
+				.andExpect(jsonPath("$[1].id").value(rating2.getId()))
+				.andExpect(jsonPath("$[1].ratingValue").value(3))
+				.andExpect(jsonPath("$[1].comment").value("Average shelter."))
+				.andExpect(jsonPath("$[1].ratingDate").value(rating2.getRatingDate().toString()));
+	}
+
+	@Test
+	void getAllRatings_NoData_ShouldReturnEmptyList() throws Exception {
+		// Arrange: Usunięcie wszystkich ratingów
+		ratingRepository.deleteAll();
+
+		// Act & Assert: Wykonanie GET i oczekiwanie pustej listy
+		mockMvc.perform(get("/api/rating"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$", hasSize(0)));
+	}
+
+	// 12. DELETE /api/rating/{id}
+	@Test
+	void deleteRating_ExistingRating_ShouldReturnNoContent() throws Exception {
+		// Arrange: Tworzenie i zapisywanie ratingu
+		Rating rating = new Rating();
+		rating.setRatingValue(4);
+		rating.setComment("Good shelter.");
+		rating.setRatingDate(LocalDate.now());
+		rating.setShelter(existingShelter);
+		Rating savedRating = ratingRepository.save(rating);
+		shelterRepository.save(existingShelter);
+
+		// Act & Assert: Wykonanie DELETE i oczekiwanie 204 No Content
+		mockMvc.perform(delete("/api/rating/{id}", savedRating.getId()))
+				.andExpect(status().isNoContent());
+
+		// Weryfikacja, że rating został usunięty
+		Optional<Rating> deletedRating = ratingRepository.findById(savedRating.getId());
+		assertFalse(deletedRating.isPresent());
+	}
+
+	@Test
+	void deleteRating_NonExistingRating_ShouldReturnNotFound() throws Exception {
+		// Arrange: Użycie nieistniejącego id
+		Long nonExistingId = 9999L;
+
+		// Act & Assert: Wykonanie DELETE i oczekiwanie 404 Not Found
+		mockMvc.perform(delete("/api/rating/{id}", nonExistingId))
+				.andExpect(status().isNotFound());
+	}
 
 }

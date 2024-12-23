@@ -1,6 +1,8 @@
 package com.example.Lab5;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "animal_shelter")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class AnimalShelter implements Serializable {
 
     @Id
@@ -31,4 +34,7 @@ public class AnimalShelter implements Serializable {
 
     @Column(name = "capacity", nullable = false)
     int maxCapacity;
+
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratingList = new ArrayList<>();
 }
