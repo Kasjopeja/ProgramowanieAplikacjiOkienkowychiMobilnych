@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#83CB83</color> <!-- Zielony dla poprawnych kretów -->
+    <color name="red">#E984A6</color>   <!-- Czerwony dla zmyłek -->
+    <color name="blue">#80CCDC</color>  <!-- Niebieski dla zmyłek -->
+    <color name="gray">#D3D3D3</color>  <!-- Szary dla nieaktywnych -->
 </resources>

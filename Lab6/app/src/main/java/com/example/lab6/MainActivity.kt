@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 deactivateMole()
                 activateRandomMole()
+                activateDecoyMoles() // Dodanie funkcji zmyłek
                 handler.postDelayed(this, 1000) // Tempo zmiany kreta (1 sekunda)
             }
         }, 1000)
@@ -68,9 +69,26 @@ class MainActivity : AppCompatActivity() {
         moleButtons[currentActiveMoleIndex].background = ContextCompat.getDrawable(this, R.drawable.mole_active)
     }
 
+    private fun activateDecoyMoles() {
+        moleButtons.forEachIndexed { index, button ->
+            if (index != currentActiveMoleIndex) {
+                val randomColor = if (Random.nextBoolean()) R.color.red else R.color.blue
+                button.background = ContextCompat.getDrawable(this, randomColorDrawable(randomColor))
+            }
+        }
+    }
+
+    private fun randomColorDrawable(color: Int): Int {
+        return when (color) {
+            R.color.red -> R.drawable.mole_decoy_red
+            R.color.blue -> R.drawable.mole_decoy_blue
+            else -> R.drawable.mole_inactive
+        }
+    }
+
     private fun deactivateMole() {
-        if (currentActiveMoleIndex != -1) {
-            moleButtons[currentActiveMoleIndex].background = ContextCompat.getDrawable(this, R.drawable.mole_inactive)
+        moleButtons.forEach { button ->
+            button.background = ContextCompat.getDrawable(this, R.drawable.mole_inactive)
         }
     }
 
