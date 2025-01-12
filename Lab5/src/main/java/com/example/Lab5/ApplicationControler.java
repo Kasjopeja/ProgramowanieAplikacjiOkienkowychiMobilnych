@@ -46,7 +46,7 @@ public class ApplicationControler {
         }
     }
 
-    // 3. GET api/animal/{id}"
+    // 3. GET api/animal/{id}
     @GetMapping("/animal/{id}")
     public ResponseEntity<Animal> getAnimalById(@PathVariable Long id) {
         return animalService.findAnimalById(id)
@@ -54,7 +54,7 @@ public class ApplicationControler {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 4. GET api/animalshelter/csv"
+    // 4. GET api/animalshelter/csv
     @GetMapping(value = "/animalshelter/csv", produces = "text/csv")
     public ResponseEntity<String> getSheltersCsv() {
         List<AnimalShelter> shelters = shelterService.findAllShelters();
@@ -99,7 +99,7 @@ public class ApplicationControler {
         }
     }
 
-    // 8. GET /animalshelter/{id}/animal
+    // 8. GET api/animalshelter/{id}/animal
     @GetMapping("/animalshelter/{id}/animal")
     public ResponseEntity<List<Animal>> getAllAnimalsInShelter(@PathVariable Long id) {
         return shelterService.findShelterById(id)
@@ -107,7 +107,7 @@ public class ApplicationControler {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 9.GET /animalshelter/{id}/fill
+    // 9. GET api/animalshelter/{id}/fill
     @GetMapping("/animalshelter/{id}/fill")
     public ResponseEntity<Double> getShelterFill(@PathVariable Long id) {
         return shelterService.findShelterById(id)
